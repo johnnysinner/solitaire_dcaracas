@@ -1,6 +1,10 @@
 package com.svi.solitaire.main;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
+
 import com.svi.solitaire.models.Rank;
 import com.svi.solitaire.models.Suit;
 import com.svi.solitaire.object.Card;
@@ -18,16 +22,16 @@ public class SolitaireGame {
 
 	public SolitaireGame() {
 		printWelcomeMessage();
+	}
+
+	// loop of the game
+	void start(int numberOfDraw, String userInput) {
 		populateDeck();
-		this.deck.shuffleCards();
+		checkIfTheUserWantShuffle(userInput);
 		populateTableau();
 		populateFoundation();
 		printAll();
 		makeFacedUpAllinDeck();
-	}
-
-	// loop of the game
-	void start(int numberOfDraw) {
 		while (!isGameFinish) {
 			sendCardtoFoundation();
 			moveKingFromLinetoEmptyLine();
@@ -36,6 +40,11 @@ public class SolitaireGame {
 			checkOtherMoves();
 			checkTheGameIfWon();
 		}
+	}
+
+	private void checkIfTheUserWantShuffle(String userInput) {
+		if (userInput.equalsIgnoreCase("Yes"))
+			this.deck.shuffleCards();
 	}
 
 	// print some text before start of the game
@@ -98,14 +107,66 @@ public class SolitaireGame {
 
 	// populating methods
 	private void populateDeck() {
-		for (Suit suit : Suit.values()) {
-			for (Rank rank : Rank.values()) {
-				Card card = new Card();
-				card.setRank(rank);
-				card.setSuit(suit);
-				this.deck.addCardAtBottom(card);
+		File f1 = new File("input.txt");
+		Scanner scanner;
+		Scanner scan = new Scanner(System.in);
+		if (!f1.exists()) {
+			System.out.println("File " + f1 + " not found.\nInput the path of the txt file:");
+		} else if (f1.exists()) {
+			try {
+				scanner = new Scanner(f1);
+				System.out.println("The file " + f1 + " has been found.");
+				while (scanner.hasNextLine()) {
+					String data[] = scanner.nextLine().split(",");
+					for (String data1 : data) {
+						String pair[] = data1.split("-");
+						if (pair.length == 2) {
+							Rank rank = GameMethods.findRank(pair[1]);
+							Suit suit = GameMethods.findSuit(pair[0]);
+
+							if (rank != null && suit != null) {
+								Card card = new Card();
+								card.setSuit(suit);
+								card.setRank(rank);
+								deck.addCardAtBottom(card);
+							}
+						}
+					}
+				}
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+
+		}
+
+		while (!f1.exists()) {
+			String fileNameInput = scan.nextLine();
+			f1 = new File(fileNameInput);
+			try {
+				scanner = new Scanner(f1);
+				while (scanner.hasNextLine()) {
+					String data[] = scanner.nextLine().split(",");
+					for (String data1 : data) {
+						String pair[] = data1.split("-");
+						if (pair.length == 2) {
+							Rank rank = GameMethods.findRank(pair[1]);
+							Suit suit = GameMethods.findSuit(pair[0]);
+
+							if (rank != null && suit != null) {
+								Card card = new Card();
+								card.setSuit(suit);
+								card.setRank(rank);
+								this.deck.addCardAtBottom(card);
+							}
+						}
+					}
+
+				}
+			} catch (FileNotFoundException e) {
+				System.out.println("File not Found. Input again the path:");
 			}
 		}
+		scan.close();
 	}
 
 	private void populateFoundation() {

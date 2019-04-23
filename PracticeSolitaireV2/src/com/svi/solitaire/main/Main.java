@@ -6,15 +6,33 @@ import java.util.Scanner;
 public class Main {
 
 	public static void main(String[] args) {
-		int numberOfDraw = 1;
 		SolitaireGame game = new SolitaireGame();
-		Scanner userInput = new Scanner(System.in);
+		Scanner scan = new Scanner(System.in);
+		int numberOfDraws = 0;
+		String inputUser;
+
 		boolean wrongInput = true;
+
+		do {
+
+			System.out.println("Do you want to shuffle the Deck? (Yes / No): ");
+			inputUser = scan.nextLine();
+			if (inputUser.equalsIgnoreCase("yes") == true) {
+				wrongInput = false;
+			} else if (inputUser.equalsIgnoreCase("No")) {
+				wrongInput = false;
+			} else {
+				wrongInput = true;
+			}
+
+		} while (wrongInput);
+
 		do {
 			try {
 				System.out.println("\nPlease Enter the Number of Draw/s (1 or 3) : ");
-				numberOfDraw = userInput.nextInt();
+				int numberOfDraw = scan.nextInt();
 				if (numberOfDraw == 1 || numberOfDraw == 3) {
+					numberOfDraws = numberOfDraw;
 					wrongInput = false;
 					System.out.println("\nCondition accepted \nNumber of draws is " + numberOfDraw);
 				} else {
@@ -23,12 +41,13 @@ public class Main {
 				}
 			} catch (InputMismatchException e) {
 				System.out.println("\nInvalid Input nPlease input a valid number");
-				userInput.nextLine();
+				scan.nextLine();
 			}
 		} while (wrongInput);
-		userInput.close();
-		
-		game.start(numberOfDraw);
+
+		scan.close();
+
+		game.start(numberOfDraws, inputUser);
 		System.out.println("=== END ===");
 	}
 }
