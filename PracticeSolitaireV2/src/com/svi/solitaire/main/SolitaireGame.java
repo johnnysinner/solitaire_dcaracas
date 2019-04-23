@@ -48,7 +48,7 @@ public class SolitaireGame {
 	// printing the entire game;
 	private void printAll() {
 		printFoundation();
-		printStacks();
+		printTableausStacks();
 		printFirstCardOfDrawPile();
 	}
 
@@ -78,7 +78,7 @@ public class SolitaireGame {
 		System.out.println("\n");
 	}
 
-	private void printStacks() {
+	private void printTableausStacks() {
 		for (int x = 1; x <= this.tableaus.size(); x++) {
 			System.out.print(x + "- col\t");
 		}
@@ -86,12 +86,12 @@ public class SolitaireGame {
 		for (int i = 0; i < highestNumberOfCardinTableau(); i++) {
 			for (int j = 0; j < this.tableaus.size(); j++) {
 				if (i < this.tableaus.get(j).size()) {
-					System.out.print(this.tableaus.get(j).get(i) + "  ");
+					System.out.print(this.tableaus.get(j).get(i).toString() + "  ");
 				} else {
 					System.out.print("\t");
 				}
 			}
-			System.out.print("\n");
+			System.out.println("");
 		}
 		System.out.println("");
 	}
@@ -109,7 +109,7 @@ public class SolitaireGame {
 	}
 
 	private void populateFoundation() {
-
+		/* adding four list inside the foundation list */
 		for (int i = 0; i < 4; ++i) {
 			ArrayList<Card> suit = new ArrayList<>();
 			this.foundation.add(suit);
@@ -173,6 +173,7 @@ public class SolitaireGame {
 
 	// some important variable that need to check
 	private int numberOfOpenCards(ArrayList<Card> tableau) {
+		/* checking the open cards in the line per tableau */
 		int count = 0;
 		for (Card card : tableau) {
 			if (card.isFacedUp() == true)
@@ -182,6 +183,9 @@ public class SolitaireGame {
 	}
 
 	private int highestNumberOfCardinTableau() {
+		/*
+		 * This method is used for printing the tableau
+		 */
 		int count = 0;
 		for (ArrayList<Card> tableau : this.tableaus) {
 			if (tableau.size() > count) {
@@ -193,6 +197,11 @@ public class SolitaireGame {
 
 	// Start of the Move in Game
 	private Card drawCard(int numberOfDraw) {
+		/*
+		 * In this method,if there is no move done in one loop of deck pile,
+		 * this will finish the game as will only loop the drawing of the cards
+		 * in the deck pile
+		 */
 		Card card = new Card();
 		if (numberOfDraw == 1) {
 			if (this.deck.getSize() == 0) {
@@ -251,6 +260,8 @@ public class SolitaireGame {
 	}
 
 	private void moveCardFromLineToLine() {
+
+		// priority the lines that has close cards
 		for (ArrayList<Card> tableauOrigin : this.tableaus) {
 			int i = 0;
 			for (ArrayList<Card> tableauDestination : this.tableaus) {
@@ -281,6 +292,8 @@ public class SolitaireGame {
 				}
 
 			}
+			// loop for moving the cards to another line along without close
+			// card on top of it.
 			int y = 0;
 			for (ArrayList<Card> tableauDestination : this.tableaus) {
 				y++;
@@ -335,6 +348,7 @@ public class SolitaireGame {
 	}
 
 	private void moveKingFromLinetoEmptyLine() {
+		// if the king is on 0 index, it will skip the index
 		for (ArrayList<Card> tableauOrigin : this.tableaus) {
 			int i = 0;
 			if (tableauOrigin.size() > 1) {
@@ -365,6 +379,10 @@ public class SolitaireGame {
 	}
 
 	private void moveKingFromTalonDeckToEmptyColumn() {
+		/*
+		 * this method will send the king from Talon Deck to Empty Column, as
+		 * this is also important for drawing 3 cards
+		 */
 		if (!this.talondeck.isEmpty()) {
 			Card topCardofDeckPile = this.talondeck.get(this.talondeck.size() - 1);
 			if (topCardofDeckPile.getRank() == Rank.KING) {
@@ -377,7 +395,7 @@ public class SolitaireGame {
 						tableau.add(this.talondeck.remove(this.talondeck.size() - 1));
 						this.movesdone += 1;
 						printFoundation();
-						printStacks();
+						printTableausStacks();
 						checkOtherMoves();
 						return;
 					}
@@ -390,11 +408,10 @@ public class SolitaireGame {
 
 	private void sendCardtoFoundation() {
 
+		/* sending ACES from tableau lines to foundation */
 		for (ArrayList<Card> tableau : this.tableaus) {
-
 			if (tableau.size() == 0)
 				continue;
-
 			if (tableau.get(tableau.size() - 1).getRank() == Rank.ACE) {
 				System.out.println(tableau.get(tableau.size() - 1).toString() + "sent to Foundation");
 				if (tableau.get(tableau.size() - 1).getSuit() == Suit.CLUBS) {
@@ -410,12 +427,15 @@ public class SolitaireGame {
 				printFoundation();
 				if (tableau.size() > 0)
 					tableau.get(tableau.size() - 1).setFacedUp(true);
-				printStacks();
+				printTableausStacks();
 				printFirstCardOfDrawPile();
 				sendCardtoFoundation();
 				return;
 			}
-
+			/*
+			 * sending the next card that is sent send to foundation from line
+			 * to foundation
+			 */
 			for (ArrayList<Card> suitFoundation : this.foundation) {
 				if (!suitFoundation.isEmpty()) {
 					if (tableau.size() == 0)
@@ -431,7 +451,7 @@ public class SolitaireGame {
 						printFoundation();
 						if (tableau.size() > 0)
 							tableau.get(tableau.size() - 1).setFacedUp(true);
-						printStacks();
+						printTableausStacks();
 						printFirstCardOfDrawPile();
 						sendCardtoFoundation();
 						return;
@@ -440,18 +460,21 @@ public class SolitaireGame {
 				}
 			}
 		}
-
+		/*
+		 * if the topcard of the talon deck is ACE it will send to the
+		 * foundation accordingly
+		 */
 		if (this.talondeck.size() > 0) {
-			Card topCardofDeckPile = this.talondeck.get(this.talondeck.size() - 1);
-			if (topCardofDeckPile.getRank() == Rank.ACE) {
-				System.out.println(topCardofDeckPile.toString() + "sent to Foundation");
-				if (topCardofDeckPile.getSuit() == Suit.CLUBS) {
+			Card topCardofTalonDeck = this.talondeck.get(this.talondeck.size() - 1);
+			if (topCardofTalonDeck.getRank() == Rank.ACE) {
+				System.out.println(topCardofTalonDeck.toString() + "sent to Foundation");
+				if (topCardofTalonDeck.getSuit() == Suit.CLUBS) {
 					this.foundation.get(0).add(this.talondeck.remove(this.talondeck.size() - 1));
-				} else if (topCardofDeckPile.getSuit() == Suit.SPADES) {
+				} else if (topCardofTalonDeck.getSuit() == Suit.SPADES) {
 					this.foundation.get(1).add(this.talondeck.remove(this.talondeck.size() - 1));
-				} else if (topCardofDeckPile.getSuit() == Suit.HEARTS) {
+				} else if (topCardofTalonDeck.getSuit() == Suit.HEARTS) {
 					this.foundation.get(2).add(this.talondeck.remove(this.talondeck.size() - 1));
-				} else if (topCardofDeckPile.getSuit() == Suit.DIAMONDS) {
+				} else if (topCardofTalonDeck.getSuit() == Suit.DIAMONDS) {
 					this.foundation.get(3).add(this.talondeck.remove(this.talondeck.size() - 1));
 				}
 				this.movesdone += 1;
@@ -459,15 +482,21 @@ public class SolitaireGame {
 				sendCardtoFoundation();
 				return;
 			}
+			/*
+			 * checking if the topcard of the talon deck is suitable for sending
+			 * it to the foundation, it is important for drawing 3 cards at a
+			 * time
+			 */
+
 			for (ArrayList<Card> suitFoundation : this.foundation) {
 				if (this.talondeck.isEmpty())
 					break;
 				if (suitFoundation.isEmpty())
 					continue;
-				if (topCardofDeckPile.getSuit() == suitFoundation.get(suitFoundation.size() - 1).getSuit()
-						&& topCardofDeckPile.getRank().getValue() - 1 == suitFoundation.get(suitFoundation.size() - 1)
+				if (topCardofTalonDeck.getSuit() == suitFoundation.get(suitFoundation.size() - 1).getSuit()
+						&& topCardofTalonDeck.getRank().getValue() - 1 == suitFoundation.get(suitFoundation.size() - 1)
 								.getRank().getValue()) {
-					System.out.println(topCardofDeckPile.toString() + " send to Foundation");
+					System.out.println(topCardofTalonDeck.toString() + " send to Foundation");
 					suitFoundation.add(this.talondeck.remove(this.talondeck.size() - 1));
 					this.movesdone += 1;
 					printAll();
@@ -486,8 +515,12 @@ public class SolitaireGame {
 		moveKingFromTalonDeckToEmptyColumn();
 	}
 
-	// check if the game is won, if the total size of foundation = 52
+	// check if the game is won
 	private void checkTheGameIfWon() {
+		/*
+		 * The game will be finish, if the total size of all list in foundation
+		 * is equal to 52
+		 */
 		int numberOfCardsInTheFoundation = 0;
 		numberOfCardsInTheFoundation = this.foundation.get(0).size() + this.foundation.get(1).size()
 				+ this.foundation.get(2).size() + this.foundation.get(3).size();
@@ -498,5 +531,4 @@ public class SolitaireGame {
 			System.out.println("You have move " + this.totalMovesDone + " times to win the game.");
 		}
 	}
-
 }
