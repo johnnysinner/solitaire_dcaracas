@@ -59,8 +59,8 @@ public class SolitaireGame {
 		} else {
 			System.out.println(this.talondeck.getCards().get(this.talondeck.getSize() - 1).toString());
 		}
-		System.out
-				.println("Remain in Draw Pile: " + this.deck.getSize() + " Remain in Talon : " + this.talondeck.getSize());
+		System.out.println(
+				"Remain in Draw Pile: " + this.deck.getSize() + " Remain in Talon : " + this.talondeck.getSize());
 		System.out.println("_____________________________________________________");
 	}
 
@@ -203,44 +203,28 @@ public class SolitaireGame {
 		 * in the deck pile
 		 */
 		Card card = new Card();
-		if (numberOfDraw == 1) {
-			if (this.deck.getSize() == 0) {
-				System.out.println("Moves done in one loop of the deck: " + this.movesdone);
-				this.totalMovesDone += this.movesdone;
-				if (this.movesdone == 0) {
-					this.isGameFinish = true;
-					System.out.println("The Game is Finish");
-					System.out.println("Total moves done: " + this.totalMovesDone);
-					return null;
-				}
-				this.movesdone = 0;
-				this.deck.addAllCards(talondeck);
-				if (this.deck.getSize() == 0)
-					return null;
-				System.out.println("Returning all cards to Deck Pile");
-				talondeck.clear();
+		if (this.deck.getSize() == 0) {
+			System.out.println("Moves done in one loop of the deck: " + this.movesdone);
+			this.totalMovesDone += this.movesdone;
+			if (this.movesdone == 0) {
+				this.isGameFinish = true;
+				System.out.println("The Game is Finish");
+				System.out.println("Total moves done: " + this.totalMovesDone);
+				return null;
 			}
+			this.movesdone = 0;
+			this.deck.addAllCards(talondeck);
+			if (this.deck.getSize() == 0)
+				return null;
+			System.out.println("Returning all cards to Deck Pile");
+			talondeck.clear();
+		}
+		if (numberOfDraw == 1) {
 			card = deck.drawCardFromTop();
 			System.out.println("Drew:" + card + "from the Deck Pile");
 			this.talondeck.addCardAtBottom(card);
 
 		} else if (numberOfDraw == 3) {
-			if (this.deck.getSize() == 0) {
-				System.out.println("Moves done in one loop of the deck: " + this.movesdone);
-				this.totalMovesDone += this.movesdone;
-				if (this.movesdone == 0) {
-					this.isGameFinish = true;
-					System.out.println("The Game is Finish");
-					System.out.println("Total moves done: " + this.totalMovesDone);
-					return null;
-				}
-				this.movesdone = 0;
-				this.deck.addAllCards(talondeck);
-				if (this.deck.getSize() == 0)
-					return null;
-				System.out.println("Returning all cards to Deck Pile");
-				talondeck.clear();
-			}
 			if (this.deck.getSize() >= 3) {
 				for (int x = 0; x < 3; x++) {
 					card = deck.drawCardFromTop();
