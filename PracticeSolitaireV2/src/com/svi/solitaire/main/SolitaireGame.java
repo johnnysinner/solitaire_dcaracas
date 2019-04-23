@@ -25,9 +25,9 @@ public class SolitaireGame {
 	}
 
 	// loop of the game
-	void start(int numberOfDraw, String userInput) {
+	void start(int numberOfDraw, String inputUser) {
 		populateDeck();
-		checkIfTheUserWantShuffle(userInput);
+		checkIfTheUserWantShuffle(inputUser);
 		populateTableau();
 		populateFoundation();
 		printAll();
@@ -42,8 +42,8 @@ public class SolitaireGame {
 		}
 	}
 
-	private void checkIfTheUserWantShuffle(String userInput) {
-		if (userInput.equalsIgnoreCase("Yes"))
+	private void checkIfTheUserWantShuffle(String inputUser) {
+		if (inputUser.equalsIgnoreCase("Yes") || inputUser.equalsIgnoreCase("y"))
 			this.deck.shuffleCards();
 	}
 
@@ -106,7 +106,7 @@ public class SolitaireGame {
 	}
 
 	// populating methods
-	private void populateDeck() {
+	public void populateDeck() {
 		File f1 = new File("input.txt");
 		Scanner scanner;
 		Scanner scan = new Scanner(System.in);
