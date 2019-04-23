@@ -196,7 +196,7 @@ public class SolitaireGame {
 	}
 
 	// Start of the Move in Game
-	private Card drawCard(int numberOfDraw) {
+	private void drawCard(int numberOfDraw) {
 		/*
 		 * In this method,if there is no move done in one loop of deck pile,
 		 * this will finish the game as will only loop the drawing of the cards
@@ -205,18 +205,19 @@ public class SolitaireGame {
 		Card card = new Card();
 		if (numberOfDraw == 1) {
 			if (this.deck.getSize() == 0) {
+				checkOtherMoves();
 				System.out.println("Moves done in one loop of the deck: " + this.movesdone);
 				this.totalMovesDone += this.movesdone;
 				if (this.movesdone == 0) {
 					this.isGameFinish = true;
 					System.out.println("The Game is Finish");
 					System.out.println("Total moves done: " + this.totalMovesDone);
-					return null;
+					return;
 				}
 				this.movesdone = 0;
 				this.deck.getCards().addAll(talondeck);
 				if (this.deck.getSize() == 0)
-					return null;
+					return;
 				System.out.println("Returning all cards to Deck Pile");
 				talondeck.clear();
 			}
@@ -226,18 +227,19 @@ public class SolitaireGame {
 
 		} else if (numberOfDraw == 3) {
 			if (this.deck.getSize() == 0) {
+				checkOtherMoves();
 				System.out.println("Moves done in one loop of the deck: " + this.movesdone);
 				this.totalMovesDone += this.movesdone;
 				if (this.movesdone == 0) {
 					this.isGameFinish = true;
 					System.out.println("The Game is Finish");
 					System.out.println("Total moves done: " + this.totalMovesDone);
-					return null;
+					return;
 				}
 				this.movesdone = 0;
 				this.deck.getCards().addAll(talondeck);
 				if (this.deck.getSize() == 0)
-					return null;
+					return;
 				System.out.println("Returning all cards to Deck Pile");
 				talondeck.clear();
 			}
@@ -256,7 +258,6 @@ public class SolitaireGame {
 			}
 		}
 		printAll();
-		return card;
 	}
 
 	private void moveCardFromLineToLine() {
