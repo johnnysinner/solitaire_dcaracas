@@ -158,8 +158,8 @@ public class SolitaireGame {
 			}
 			shuffledDeck = new Deck();
 			for (int j = 0; j < deck.getSize() / 2; j++) {
-				shuffledDeck.addCardAtTop(temporaryDeck.getCards().get(j));
-				shuffledDeck.addCardAtTop(temporaryDeck.getCards().get(j + (this.deck.getSize() / 2)));
+				shuffledDeck.addCardAtBottom(temporaryDeck.getCards().get(j));
+				shuffledDeck.addCardAtBottom(temporaryDeck.getCards().get(j + (this.deck.getSize() / 2)));
 			}
 		}
 		this.deck = shuffledDeck;
