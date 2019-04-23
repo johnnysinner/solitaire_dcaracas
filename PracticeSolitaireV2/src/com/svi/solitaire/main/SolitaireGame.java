@@ -20,6 +20,9 @@ public class SolitaireGame {
 		printWelcomeMessage();
 		populateDeck();
 		this.deck.shuffleCards();
+		// for(Card card : this.deck.getCards()) card.setFacedUp(true);
+		// System.out.println(this.deck.getCards().toString());
+		// for(Card card : this.deck.getCards()) card.setFacedUp(false);
 		populateTableau();
 		populateFoundation();
 		printAll();
