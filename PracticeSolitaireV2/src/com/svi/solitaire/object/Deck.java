@@ -47,7 +47,18 @@ public class Deck {
 		}
 	}
 
+	public void addAllCards(Deck deck) {
+		for (Card card : deck.getCards()) {
+			this.deckofcards.add(card);
+		}
+	}
+
 	public void clear() {
 		this.deckofcards.clear();
 	}
+
+	public Card remove(int i) {
+		return this.deckofcards.remove(i);
+	}
+
 }

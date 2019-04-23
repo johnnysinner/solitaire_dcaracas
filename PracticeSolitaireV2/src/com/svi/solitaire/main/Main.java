@@ -27,6 +27,7 @@ public class Main {
 			}
 		} while (wrongInput);
 		userInput.close();
+		
 		game.start(numberOfDraw);
 		System.out.println("=== END ===");
 	}

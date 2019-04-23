@@ -9,8 +9,8 @@ import com.svi.solitaire.object.Deck;
 public class SolitaireGame {
 
 	private Deck deck = new Deck();
+	private Deck talondeck = new Deck();
 	ArrayList<ArrayList<Card>> tableaus = new ArrayList<>();
-	ArrayList<Card> talondeck = new ArrayList<>();
 	ArrayList<ArrayList<Card>> foundation = new ArrayList<>();
 	private int movesdone = 0;
 	private boolean isGameFinish = false;
@@ -20,9 +20,6 @@ public class SolitaireGame {
 		printWelcomeMessage();
 		populateDeck();
 		this.deck.shuffleCards();
-		// for(Card card : this.deck.getCards()) card.setFacedUp(true);
-		// System.out.println(this.deck.getCards().toString());
-		// for(Card card : this.deck.getCards()) card.setFacedUp(false);
 		populateTableau();
 		populateFoundation();
 		printAll();
@@ -60,10 +57,10 @@ public class SolitaireGame {
 		if (this.talondeck.isEmpty()) {
 			System.out.println("[    ]");
 		} else {
-			System.out.println(this.talondeck.get(this.talondeck.size() - 1).toString());
+			System.out.println(this.talondeck.getCards().get(this.talondeck.getSize() - 1).toString());
 		}
 		System.out
-				.println("Remain in Draw Pile: " + this.deck.getSize() + " Remain in Talon : " + this.talondeck.size());
+				.println("Remain in Draw Pile: " + this.deck.getSize() + " Remain in Talon : " + this.talondeck.getSize());
 		System.out.println("_____________________________________________________");
 	}
 
@@ -161,8 +158,8 @@ public class SolitaireGame {
 			}
 			shuffledDeck = new Deck();
 			for (int j = 0; j < deck.getSize() / 2; j++) {
-				shuffledDeck.addCardAtBottom(temporaryDeck.getCards().get(j));
-				shuffledDeck.addCardAtBottom(temporaryDeck.getCards().get(j + (this.deck.getSize() / 2)));
+				shuffledDeck.addCardAtTop(temporaryDeck.getCards().get(j));
+				shuffledDeck.addCardAtTop(temporaryDeck.getCards().get(j + (this.deck.getSize() / 2)));
 			}
 		}
 		this.deck = shuffledDeck;
@@ -199,7 +196,7 @@ public class SolitaireGame {
 	}
 
 	// Start of the Move in Game
-	private void drawCard(int numberOfDraw) {
+	private Card drawCard(int numberOfDraw) {
 		/*
 		 * In this method,if there is no move done in one loop of deck pile,
 		 * this will finish the game as will only loop the drawing of the cards
@@ -208,41 +205,39 @@ public class SolitaireGame {
 		Card card = new Card();
 		if (numberOfDraw == 1) {
 			if (this.deck.getSize() == 0) {
-				checkOtherMoves();
 				System.out.println("Moves done in one loop of the deck: " + this.movesdone);
 				this.totalMovesDone += this.movesdone;
 				if (this.movesdone == 0) {
 					this.isGameFinish = true;
 					System.out.println("The Game is Finish");
 					System.out.println("Total moves done: " + this.totalMovesDone);
-					return;
+					return null;
 				}
 				this.movesdone = 0;
-				this.deck.getCards().addAll(talondeck);
+				this.deck.addAllCards(talondeck);
 				if (this.deck.getSize() == 0)
-					return;
+					return null;
 				System.out.println("Returning all cards to Deck Pile");
 				talondeck.clear();
 			}
 			card = deck.drawCardFromTop();
 			System.out.println("Drew:" + card + "from the Deck Pile");
-			this.talondeck.add(card);
+			this.talondeck.addCardAtBottom(card);
 
 		} else if (numberOfDraw == 3) {
 			if (this.deck.getSize() == 0) {
-				checkOtherMoves();
 				System.out.println("Moves done in one loop of the deck: " + this.movesdone);
 				this.totalMovesDone += this.movesdone;
 				if (this.movesdone == 0) {
 					this.isGameFinish = true;
 					System.out.println("The Game is Finish");
 					System.out.println("Total moves done: " + this.totalMovesDone);
-					return;
+					return null;
 				}
 				this.movesdone = 0;
-				this.deck.getCards().addAll(talondeck);
+				this.deck.addAllCards(talondeck);
 				if (this.deck.getSize() == 0)
-					return;
+					return null;
 				System.out.println("Returning all cards to Deck Pile");
 				talondeck.clear();
 			}
@@ -250,17 +245,18 @@ public class SolitaireGame {
 				for (int x = 0; x < 3; x++) {
 					card = deck.drawCardFromTop();
 					System.out.println("Drew:" + card + "from the Deck Pile");
-					this.talondeck.add(card);
+					this.talondeck.addCardAtBottom(card);
 				}
 			} else {
 				for (int x = 0; x < this.deck.getSize(); x++) {
 					card = deck.drawCardFromTop();
 					System.out.println("Drew:" + card + "from the Deck Pile");
-					this.talondeck.add(card);
+					this.talondeck.addCardAtBottom(card);
 				}
 			}
 		}
 		printAll();
+		return card;
 	}
 
 	private void moveCardFromLineToLine() {
@@ -337,12 +333,12 @@ public class SolitaireGame {
 			if (tableauDestination.isEmpty() || this.talondeck.isEmpty())
 				continue;
 			i++;
-			Card lastcardOfDrawPile = this.talondeck.get(talondeck.size() - 1);
+			Card lastcardOfDrawPile = this.talondeck.getCards().get(talondeck.getSize() - 1);
 			Card lastcardOfTableau = tableauDestination.get(tableauDestination.size() - 1);
 			if (lastcardOfDrawPile.getRank().getValue() + 1 == lastcardOfTableau.getRank().getValue()
 					&& lastcardOfDrawPile.getColor() != lastcardOfTableau.getColor()) {
 				System.out.println(lastcardOfDrawPile.toString() + " has been moved to column " + i);
-				tableauDestination.add(this.talondeck.remove(talondeck.size() - 1));
+				tableauDestination.add(this.talondeck.remove(talondeck.getSize() - 1));
 				this.movesdone += 1;
 				printAll();
 				checkOtherMoves();
@@ -388,7 +384,7 @@ public class SolitaireGame {
 		 * this is also important for drawing 3 cards
 		 */
 		if (!this.talondeck.isEmpty()) {
-			Card topCardofDeckPile = this.talondeck.get(this.talondeck.size() - 1);
+			Card topCardofDeckPile = this.talondeck.getCards().get(this.talondeck.getSize() - 1);
 			if (topCardofDeckPile.getRank() == Rank.KING) {
 				int i = 1;
 				for (ArrayList<Card> tableau : this.tableaus) {
@@ -396,9 +392,10 @@ public class SolitaireGame {
 						if (this.talondeck.isEmpty())
 							break;
 						System.out.println(topCardofDeckPile.toString() + "move to column " + i);
-						tableau.add(this.talondeck.remove(this.talondeck.size() - 1));
+						tableau.add(this.talondeck.remove(this.talondeck.getSize() - 1));
 						this.movesdone += 1;
-						printAll();
+						printFoundation();
+						printTableausStacks();
 						checkOtherMoves();
 						return;
 					}
@@ -467,18 +464,18 @@ public class SolitaireGame {
 		 * if the topcard of the talon deck is ACE it will send to the
 		 * foundation accordingly
 		 */
-		if (this.talondeck.size() > 0) {
-			Card topCardofTalonDeck = this.talondeck.get(this.talondeck.size() - 1);
+		if (this.talondeck.getSize() > 0) {
+			Card topCardofTalonDeck = this.talondeck.getCards().get(this.talondeck.getSize() - 1);
 			if (topCardofTalonDeck.getRank() == Rank.ACE) {
 				System.out.println(topCardofTalonDeck.toString() + "sent to Foundation");
 				if (topCardofTalonDeck.getSuit() == Suit.CLUBS) {
-					this.foundation.get(0).add(this.talondeck.remove(this.talondeck.size() - 1));
+					this.foundation.get(0).add(this.talondeck.remove(this.talondeck.getSize() - 1));
 				} else if (topCardofTalonDeck.getSuit() == Suit.SPADES) {
-					this.foundation.get(1).add(this.talondeck.remove(this.talondeck.size() - 1));
+					this.foundation.get(1).add(this.talondeck.remove(this.talondeck.getSize() - 1));
 				} else if (topCardofTalonDeck.getSuit() == Suit.HEARTS) {
-					this.foundation.get(2).add(this.talondeck.remove(this.talondeck.size() - 1));
+					this.foundation.get(2).add(this.talondeck.remove(this.talondeck.getSize() - 1));
 				} else if (topCardofTalonDeck.getSuit() == Suit.DIAMONDS) {
-					this.foundation.get(3).add(this.talondeck.remove(this.talondeck.size() - 1));
+					this.foundation.get(3).add(this.talondeck.remove(this.talondeck.getSize() - 1));
 				}
 				this.movesdone += 1;
 				printAll();
@@ -500,7 +497,7 @@ public class SolitaireGame {
 						&& topCardofTalonDeck.getRank().getValue() - 1 == suitFoundation.get(suitFoundation.size() - 1)
 								.getRank().getValue()) {
 					System.out.println(topCardofTalonDeck.toString() + " send to Foundation");
-					suitFoundation.add(this.talondeck.remove(this.talondeck.size() - 1));
+					suitFoundation.add(this.talondeck.remove(this.talondeck.getSize() - 1));
 					this.movesdone += 1;
 					printAll();
 					sendCardtoFoundation();
