@@ -34,10 +34,6 @@ public class Deck {
 		return deckofcards;
 	}
 
-	public void shuffleCards() {
-		Collections.shuffle(this.deckofcards);
-	}
-
 	public boolean isEmpty() {
 		if (deckofcards.isEmpty()) {
 			return true;

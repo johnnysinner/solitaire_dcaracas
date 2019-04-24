@@ -3,6 +3,7 @@ package com.svi.solitaire.main;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 import com.svi.solitaire.models.Rank;
@@ -44,7 +45,7 @@ public class SolitaireGame {
 
 	private void checkIfTheUserWantShuffle(String inputUser) {
 		if (inputUser.equalsIgnoreCase("Yes") || inputUser.equalsIgnoreCase("y"))
-			this.deck.shuffleCards();
+			Collections.shuffle(this.deck.getCards());
 	}
 
 	// print some text before start of the game
