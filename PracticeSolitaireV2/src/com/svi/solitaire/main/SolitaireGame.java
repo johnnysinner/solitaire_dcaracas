@@ -33,9 +33,9 @@ public class SolitaireGame {
 		printAll();
 		makeFacedUpAllinDeck();
 		while (!isGameFinish) {
-			sendCardtoFoundation();
-			moveKingFromLinetoEmptyLine();
 			moveCardFromLineToLine();
+			moveKingFromLinetoEmptyLine();
+			sendCardtoFoundation();
 			drawCard(numberOfDraw);
 			checkOtherMoves();
 			checkTheGameIfWon();
