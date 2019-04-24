@@ -1,10 +1,7 @@
 package com.svi.solitaire.main;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Scanner;
 
 import com.svi.solitaire.models.Rank;
 import com.svi.solitaire.models.Suit;
@@ -13,7 +10,7 @@ import com.svi.solitaire.object.Deck;
 
 public class SolitaireGame {
 
-	private Deck deck = new Deck();
+	static Deck deck = new Deck();
 	private Deck talondeck = new Deck();
 	ArrayList<ArrayList<Card>> tableaus = new ArrayList<>();
 	ArrayList<ArrayList<Card>> foundation = new ArrayList<>();
@@ -27,7 +24,6 @@ public class SolitaireGame {
 
 	// loop of the game
 	void start(int numberOfDraw, String inputUser) {
-		populateDeck();
 		checkIfTheUserWantShuffle(inputUser);
 		populateTableau();
 		populateFoundation();
@@ -45,7 +41,7 @@ public class SolitaireGame {
 
 	private void checkIfTheUserWantShuffle(String inputUser) {
 		if (inputUser.equalsIgnoreCase("Yes") || inputUser.equalsIgnoreCase("y"))
-			Collections.shuffle(this.deck.getCards());
+			Collections.shuffle(SolitaireGame.deck.getCards());
 	}
 
 	// print some text before start of the game
@@ -70,7 +66,7 @@ public class SolitaireGame {
 			System.out.println(this.talondeck.getCards().get(this.talondeck.getSize() - 1).toString());
 		}
 		System.out.println(
-				"Remain in Draw Pile: " + this.deck.getSize() + " Remain in Talon : " + this.talondeck.getSize());
+				"Remain in Draw Pile: " + SolitaireGame.deck.getSize() + " Remain in Talon : " + this.talondeck.getSize());
 		System.out.println("_____________________________________________________");
 	}
 
@@ -108,66 +104,7 @@ public class SolitaireGame {
 
 	// populating methods
 	public void populateDeck() {
-		File f1 = new File("input.txt");
-		Scanner scanner;
-		Scanner scan = new Scanner(System.in);
-		if (!f1.exists()) {
-			System.out.println("File " + f1 + " not found.\nInput the path of the txt file:");
-		} else if (f1.exists()) {
-			try {
-				scanner = new Scanner(f1);
-				System.out.println("The file " + f1 + " has been found.");
-				while (scanner.hasNextLine()) {
-					String data[] = scanner.nextLine().split(",");
-					for (String data1 : data) {
-						String pair[] = data1.split("-");
-						if (pair.length == 2) {
-							Rank rank = GameMethods.findRank(pair[1]);
-							Suit suit = GameMethods.findSuit(pair[0]);
 
-							if (rank != null && suit != null) {
-								Card card = new Card();
-								card.setSuit(suit);
-								card.setRank(rank);
-								deck.addCardAtBottom(card);
-							}
-						}
-					}
-				}
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-
-		}
-
-		while (!f1.exists()) {
-			String fileNameInput = scan.nextLine();
-			f1 = new File(fileNameInput);
-			try {
-				scanner = new Scanner(f1);
-				while (scanner.hasNextLine()) {
-					String data[] = scanner.nextLine().split(",");
-					for (String data1 : data) {
-						String pair[] = data1.split("-");
-						if (pair.length == 2) {
-							Rank rank = GameMethods.findRank(pair[1]);
-							Suit suit = GameMethods.findSuit(pair[0]);
-
-							if (rank != null && suit != null) {
-								Card card = new Card();
-								card.setSuit(suit);
-								card.setRank(rank);
-								this.deck.addCardAtBottom(card);
-							}
-						}
-					}
-
-				}
-			} catch (FileNotFoundException e) {
-				System.out.println("File not Found. Input again the path:");
-			}
-		}
-		scan.close();
 	}
 
 	private void populateFoundation() {
@@ -189,9 +126,9 @@ public class SolitaireGame {
 
 			for (int x = i; x < 7; x++) {
 				if (x == i) {
-					this.deck.getCards().get(0).setFacedUp(true);
+					SolitaireGame.deck.getCards().get(0).setFacedUp(true);
 				}
-				this.tableaus.get(x).add(this.deck.drawCardFromTop());
+				this.tableaus.get(x).add(SolitaireGame.deck.drawCardFromTop());
 
 			}
 		}
@@ -200,7 +137,7 @@ public class SolitaireGame {
 	// for checking inside the drawPile, This only makes the remaining card open
 	private void makeFacedUpAllinDeck() {
 		System.out.println("\nRemaining in Deck Pile: ");
-		for (int i = 0; i < this.deck.getSize(); i++) {
+		for (int i = 0; i < SolitaireGame.deck.getSize(); i++) {
 			deck.getCards().get(i).setFacedUp(true);
 			System.out.print(deck.getCards().get(i).toString());
 		}
@@ -214,22 +151,22 @@ public class SolitaireGame {
 
 		for (int i = 0; i < numOfShuffles; i++) {
 			if (shuffledDeck.isEmpty()) {
-				temporaryDeck = this.deck;
+				temporaryDeck = SolitaireGame.deck;
 			} else {
 				temporaryDeck = shuffledDeck;
 			}
 			shuffledDeck = new Deck();
 			for (int j = 0; j < deck.getSize() / 2; j++) {
 				shuffledDeck.addCardAtTop(temporaryDeck.getCards().get(j));
-				shuffledDeck.addCardAtTop(temporaryDeck.getCards().get(j + (this.deck.getSize() / 2)));
+				shuffledDeck.addCardAtTop(temporaryDeck.getCards().get(j + (SolitaireGame.deck.getSize() / 2)));
 			}
 		}
-		this.deck = shuffledDeck;
+		SolitaireGame.deck = shuffledDeck;
 		System.out.println("\nShuffled Deck :");
-		for (int i = 0; i < this.deck.getSize(); i++) {
-			this.deck.getCards().get(i).setFacedUp(true);
-			System.out.print(this.deck.getCards().get(i) + ", ");
-			this.deck.getCards().get(i).setFacedUp(false);
+		for (int i = 0; i < SolitaireGame.deck.getSize(); i++) {
+			SolitaireGame.deck.getCards().get(i).setFacedUp(true);
+			System.out.print(SolitaireGame.deck.getCards().get(i) + ", ");
+			SolitaireGame.deck.getCards().get(i).setFacedUp(false);
 		}
 	}
 
@@ -265,7 +202,7 @@ public class SolitaireGame {
 		 * in the deck pile
 		 */
 		Card card = new Card();
-		if (this.deck.getSize() == 0) {
+		if (SolitaireGame.deck.getSize() == 0) {
 			System.out.println("Moves done in one loop of the deck: " + this.movesdone);
 			this.totalMovesDone += this.movesdone;
 			if (this.movesdone == 0) {
@@ -275,8 +212,8 @@ public class SolitaireGame {
 				return null;
 			}
 			this.movesdone = 0;
-			this.deck.addAllCards(talondeck);
-			if (this.deck.getSize() == 0)
+			SolitaireGame.deck.addAllCards(talondeck);
+			if (SolitaireGame.deck.getSize() == 0)
 				return null;
 			System.out.println("Returning all cards to Deck Pile");
 			talondeck.clear();
@@ -287,14 +224,14 @@ public class SolitaireGame {
 			this.talondeck.addCardAtBottom(card);
 
 		} else if (numberOfDraw == 3) {
-			if (this.deck.getSize() >= 3) {
+			if (SolitaireGame.deck.getSize() >= 3) {
 				for (int x = 0; x < 3; x++) {
 					card = deck.drawCardFromTop();
 					System.out.println("Drew:" + card + "from the Deck Pile");
 					this.talondeck.addCardAtBottom(card);
 				}
 			} else {
-				for (int x = 0; x < this.deck.getSize(); x++) {
+				for (int x = 0; x < SolitaireGame.deck.getSize(); x++) {
 					card = deck.drawCardFromTop();
 					System.out.println("Drew:" + card + "from the Deck Pile");
 					this.talondeck.addCardAtBottom(card);
@@ -440,7 +377,7 @@ public class SolitaireGame {
 						System.out.println(topCardofDeckPile.toString() + "move to column " + i);
 						tableau.add(this.talondeck.remove(this.talondeck.getSize() - 1));
 						this.movesdone += 1;
-						printAll();						
+						printAll();
 						checkOtherMoves();
 						return;
 					}
