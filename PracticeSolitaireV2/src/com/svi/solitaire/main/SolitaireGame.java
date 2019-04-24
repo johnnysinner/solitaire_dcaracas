@@ -474,7 +474,7 @@ public class SolitaireGame {
 					tableau.get(tableau.size() - 1).setFacedUp(true);
 				printTableausStacks();
 				printFirstCardOfDrawPile();
-				sendCardtoFoundation();
+				checkOtherMoves();
 				return;
 			}
 			/*
@@ -498,7 +498,7 @@ public class SolitaireGame {
 							tableau.get(tableau.size() - 1).setFacedUp(true);
 						printTableausStacks();
 						printFirstCardOfDrawPile();
-						sendCardtoFoundation();
+						checkOtherMoves();
 						return;
 
 					}
@@ -524,7 +524,7 @@ public class SolitaireGame {
 				}
 				this.movesdone += 1;
 				printAll();
-				sendCardtoFoundation();
+				checkOtherMoves();
 				return;
 			}
 			/*
@@ -545,7 +545,7 @@ public class SolitaireGame {
 					suitFoundation.add(this.talondeck.remove(this.talondeck.getSize() - 1));
 					this.movesdone += 1;
 					printAll();
-					sendCardtoFoundation();
+					checkOtherMoves();
 				}
 			}
 		}
