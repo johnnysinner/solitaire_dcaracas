@@ -553,11 +553,11 @@ public class SolitaireGame {
 
 	// loop for other moves
 	private void checkOtherMoves() {
-		sendCardtoFoundation();
 		moveCardFromTalonDecktoLine();
 		moveCardFromLineToLine();
 		moveKingFromLinetoEmptyLine();
 		moveKingFromTalonDeckToEmptyColumn();
+		sendCardtoFoundation();
 	}
 
 	// check if the game is won
