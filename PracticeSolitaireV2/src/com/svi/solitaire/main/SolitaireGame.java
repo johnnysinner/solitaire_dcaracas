@@ -439,8 +439,7 @@ public class SolitaireGame {
 						System.out.println(topCardofDeckPile.toString() + "move to column " + i);
 						tableau.add(this.talondeck.remove(this.talondeck.getSize() - 1));
 						this.movesdone += 1;
-						printFoundation();
-						printTableausStacks();
+						printAll();						
 						checkOtherMoves();
 						return;
 					}
