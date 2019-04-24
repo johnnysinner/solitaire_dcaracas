@@ -17,39 +17,6 @@ public class Main {
 		int numberOfDraw = 0;
 		String inputUser;
 
-		boolean wrongInput = true;
-
-		do {
-
-			System.out.println("Do you want to shuffle the Deck? (Yes / No): ");
-			inputUser = scan.next();
-			if (inputUser.equalsIgnoreCase("yes") || inputUser.equalsIgnoreCase("y")) {
-				wrongInput = false;
-			} else if (inputUser.equalsIgnoreCase("No") || inputUser.equalsIgnoreCase("n")) {
-				wrongInput = false;
-			} else {
-				wrongInput = true;
-			}
-
-		} while (wrongInput);
-		wrongInput = true;
-		do {
-			try {
-				System.out.println("\nPlease Enter the Number of Draw/s (1 or 3) : ");
-				numberOfDraw = scan.nextInt();
-				if (numberOfDraw == 1 || numberOfDraw == 3) {
-					wrongInput = false;
-					System.out.println("\nCondition accepted \nNumber of draws is " + numberOfDraw);
-				} else {
-					System.out.println("\nInvalid Input \nCannot draw " + numberOfDraw + " number of times");
-					wrongInput = true;
-				}
-			} catch (InputMismatchException e) {
-				System.out.println("\nInvalid Input \nPlease input a valid number");
-				scan.next();
-			}
-		} while (wrongInput);
-
 		File f1 = new File("input.txt");
 		Scanner scanner;
 		if (!f1.exists()) {
@@ -108,6 +75,39 @@ public class Main {
 				System.out.println("File not Found. Input again the path:");
 			}
 		}
+		boolean wrongInput = true;
+
+		do {
+
+			System.out.println("Do you want to shuffle the Deck? (Yes / No): ");
+			inputUser = scan.next();
+			if (inputUser.equalsIgnoreCase("yes") || inputUser.equalsIgnoreCase("y")) {
+				wrongInput = false;
+			} else if (inputUser.equalsIgnoreCase("No") || inputUser.equalsIgnoreCase("n")) {
+				wrongInput = false;
+			} else {
+				wrongInput = true;
+			}
+
+		} while (wrongInput);
+		wrongInput = true;
+		do {
+			try {
+				System.out.println("\nPlease Enter the Number of Draw/s (1 or 3) : ");
+				numberOfDraw = scan.nextInt();
+				if (numberOfDraw == 1 || numberOfDraw == 3) {
+					wrongInput = false;
+					System.out.println("\nCondition accepted \nNumber of draws is " + numberOfDraw);
+				} else {
+					System.out.println("\nInvalid Input \nCannot draw " + numberOfDraw + " number of times");
+					wrongInput = true;
+				}
+			} catch (InputMismatchException e) {
+				System.out.println("\nInvalid Input \nPlease input a valid number");
+				scan.next();
+			}
+		} while (wrongInput);
+
 		scan.close();
 
 		game.start(numberOfDraw, inputUser);
